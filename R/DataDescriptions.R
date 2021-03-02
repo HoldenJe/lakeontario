@@ -21,3 +21,11 @@
 #' Data is a SpatialPolygonsDataFrame [package "sp"]
 #'
 "LObath100m"
+
+
+#' USGS_Species
+#'
+#' RVCAT reference table for SPECIES codes and COMMON_NAME
+#' @format A data frame
+#'
+"USGS_Species"
