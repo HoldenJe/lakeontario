@@ -1,11 +1,15 @@
 Package: lakeontario
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Title: Lake Ontario Fisheries Tools
+Version: 0.1.03
+Author: Jeremy Holden
+Maintainer: Jeremy Holden <jeremy.holden@ontario.ca>
+Description: A collection of useful tools for conducting fisheries analysis on Lake Ontario. The package includes base maps for the lake. The package also inlcudes themes that standardize ggplot figures for the Lake Ontario Management Unit Annual Report.
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.1
+Depends: R (>= 3.2.0)
+Imports:
+    ggplot2,
+    sp
