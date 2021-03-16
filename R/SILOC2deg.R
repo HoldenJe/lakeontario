@@ -7,7 +7,7 @@ SILOCgetLAT12<-function(fn121column) {
   LATdeg<-as.integer(substr(LATa, 1,2))
   LATmin<-as.integer(substr(LATa, 3,4))
   LATsec<-as.integer(substr(LATa, 5,6))
-  LAT<-(LATdeg + (LATmin +(LATsec)/60)/60)
+  LAT<-(LATdeg + (LATmin +(LATsec)/100)/60)
   LAT
 }
 
@@ -21,7 +21,7 @@ SILOCgetLON12<-function(fn121column) {
   LATdeg<-as.integer(substr(LATa, 1,2))
   LATmin<-as.integer(substr(LATa, 3,4))
   LATsec<-as.integer(substr(LATa, 5,6))
-  LAT<-(LATdeg + (LATmin +(LATsec)/60)/60)*(-1)
+  LAT<-(LATdeg + (LATmin +(LATsec)/100)/60)*(-1)
   LAT
 }
 
@@ -34,7 +34,7 @@ SILOCgetLAT10<-function(fn121column) {
   LATdeg<-as.integer(substr(LATa, 1, 2))
   LATmin<-as.integer(substr(LATa, 3, 4))
   LATsec<-as.integer(substr(LATa, 5, 5))
-  LAT<-(LATdeg + (LATmin +(LATsec)/60)/60)
+  LAT<-(LATdeg + (LATmin +(LATsec)/10)/60)
   LAT
 }
 
@@ -48,7 +48,7 @@ SILOCgetLON10<-function(fn121column) {
   LATdeg<-as.integer(substr(LATa, 1, 2))
   LATmin<-as.integer(substr(LATa, 3, 4))
   LATsec<-as.integer(substr(LATa, 5, 5))
-  LAT<-(LATdeg + (LATmin +(LATsec)/60)/60)*(-1)
+  LAT<-(LATdeg + (LATmin +(LATsec)/10)/60)*(-1)
   LAT
 }
 
