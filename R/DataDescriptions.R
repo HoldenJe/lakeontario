@@ -29,3 +29,10 @@
 #' @format A data frame
 #'
 "USGS_Species"
+
+#' RV2FN_SPECIES
+#'
+#' RVCAT reference table for SPECIES code and corresponding SPC code (FN2)
+#' @format A data frame
+#'
+"RV2FN_SPECIES"
