@@ -1,7 +1,7 @@
 #' convert2coorddd
 #' @description Parses coordinates from a NMEA string to Deg_DD
 #' @param coord A coordinate in the for DDMM.ddd
-#' @example
+#' @examples
 #' convert2coorddd(4351.986)
 #' @export
 
