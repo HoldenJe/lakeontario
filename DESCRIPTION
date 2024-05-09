@@ -1,7 +1,7 @@
 Package: lakeontario
 Type: Package
 Title: Lake Ontario Fisheries Tools
-Version: 0.1.7
+Version: 0.1.8
 Author: Jeremy Holden
 Maintainer: Jeremy Holden <jeremy.holden@ontario.ca>
 Description: A collection of useful tools for conducting fisheries analysis on Lake Ontario. The package includes base maps for the lake. The package also inlcudes themes that standardize ggplot figures for the Lake Ontario Management Unit Annual Report.
