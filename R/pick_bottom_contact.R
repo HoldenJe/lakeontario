@@ -34,3 +34,44 @@ pick_bottom_contact <- function(onetow){
                    ON_BOTTOM_DURATION_SEC = as.numeric(difftime(liftoff, touchdown, units = "sec")))
   df
 }
+
+
+#' Pick bottom contact time from footrope only
+#'
+#' @param onetow expects an RBR temperature profiles
+#'
+#' @return dataframe with start, end and measured bottom contact time (in seconds) for each tow provided
+#' @export
+#' @description
+#' A function that first creates a plot then provides a cursor for the user to identify the start and end of where
+#' the trawl contacted bottom (or in the case of a midwater trawl, reached the target fishing depth).
+#'
+#' @seealso [rbr_tow_plot()]
+#' @seealso [pick_bottom_contact()]
+#' @examples\dontrun{
+#' library(lakeontario)
+#' rbrfiles <- dir("Data/RBRClean", full.names = T)
+#' towstats <- import_foot_rope_files(rbrfiles)
+#' head(towstats)
+#' str(towstats)
+#' tow_stat_list <- split(towstats, towstats$SERIAL)
+#' lapply(onetow, pick_bottom_contact_from_foot)
+#' }
+#'
+pick_bottom_contact_from_foot <- function(onetow){
+  if(length(unique(onetow$SERIAL))!=1){stop("More than one SERIAL in data")}
+  onetow <- onetow[onetow$FOOT_DEPTH >1,]
+  plot(FOOT_DEPTH~TIME, onetow, type='l', col='red', bty='l',
+       ylim=c(max(onetow$FOOT_DEPTH)+2, max(onetow$FOOT_DEPTH)-10))
+  print("Pick start and end time on the plot")
+  pt <- identify(onetow$TIME, onetow$FOOT_DEPTH, n=2)
+  touchdown <- onetow$TIME[pt[1]]
+  liftoff <- onetow$TIME[pt[2]]
+  df <- data.frame(YEAR = unique(onetow$YEAR),
+                   VESSEL = unique(onetow$VESSEL),
+                   SERIAL = unique(onetow$SERIAL),
+                   ON_BOTTOM = touchdown,
+                   OFF_BOTTOM = liftoff,
+                   ON_BOTTOM_DURATION_SEC = as.numeric(difftime(liftoff, touchdown, units = "sec")))
+  df
+}
