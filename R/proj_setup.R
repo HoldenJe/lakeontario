@@ -35,24 +35,27 @@ proj_setup <- function(path, ...) {
   )
 
   instructions <- c(
-    "# Binational Trawl Project Template Intructions",
+    "# Binational Trawl Project Template Intructions  ",
     "<!-- This file is best viewed using the RStudio previewer -->",
-    "## Create Standard Templates",
-    "Run `lakeontario::finish_setup()` to finish setup",
+    "## Standard Templates  ",
+    "Standard templates have been pre-loaded to the existing directories.",
     "  ",
+    "## Generalized Workflow  ",
+    "1. Add FEED database to Data/Raw  ",
+    "2. Run Reports/1_FEED_pointblank_error_check_routine.R daily to check for errors or missing data in FEED.  ",
+    "3. Reports/2_FEED_pointblank_error_check_report.Rmd can be used to create a stand alone HTML error report.  ",
+    "4. At the completion of the survey run Analysis/1_RBR_bottom_pick.R to create tow mensuration files.  ",
+    "5. When FEED data is clean, migrate to GLIS database template using Analysis/2_FEED_to_GLIS_T5.R  ",
+    "6. Analysis/3_rprocval_checks_GLIS_T5.R can then be used prior to running GLIS procval to inspect the data quality  ",
+    "7. Additionally, Reports/3_error_check_report.Rmd can be used to create a HTML report  ",
     "  ",
     "## Folder Description and Contents",
     FolderDescrip,
     "  ",
     "  ",
-    "# Templates",
-    "The following custom markdown templates can be accessed by selecting New Markdown > From Template",
-    "<br />",
-    "- Project Summary Report <br />",
-    "- Project Dashboard <br />",
     "<hr />",
     "<br />",
-    '<p style="text-align: center;"> *This file can be deleted following project set up.*</p>'
+    '<p style="text-align: center;"> *This file was created auto-magically by `lakeontario`*</p>'
   )
 
   writeLines(instructions, con = file.path(path, "Instructions.md"))
@@ -90,9 +93,41 @@ proj_setup <- function(path, ...) {
   readme <- c(contents, " ", abstract, " ", "# Folder Description", " ", FolderDescrip)
   writeLines(readme, con = file.path(path, "ReadMe.md"))
   save(prj_params, file = file.path(path, "params.RData"))
+
+  # create template files
+  usethis::use_template(
+    template = "pointblank_FEED_validation.R",
+    save_as = file.path(path,"Reports/1_FEED_pointblank_error_check_routine.R"),
+    package = "lakeontario"
+  )
+
   usethis::use_template(
     template = "multiagent.Rmd",
-    save_as = "Reports/1_FEED_pointblank_error_check_report.Rmd",
+    save_as = file.path(path,"Reports/2_FEED_pointblank_error_check_report.Rmd"),
+    package = "lakeontario"
+  )
+
+  usethis::use_template(
+    template = "rprocval_gl5_checks.Rmd",
+    save_as = file.path(path,"Reports/3_error_check_report.Rmd"),
+    package = "lakeontario"
+  )
+
+  usethis::use_template(
+    template = "bottom_pick.R",
+    save_as = file.path(path, "Analysis/1_RBR_bottom_pick.R"),
+    package = "lakeontario"
+  )
+
+  usethis::use_template(
+    template = "FEED2GLIS.R",
+    save_as = file.path(path, "Analysis/2_FEED_to_GLIS_T5.R"),
+    package = "lakeontario"
+  )
+
+  usethis::use_template(
+    template = "rprocval_gl5_checks.R",
+    save_as = file.path(path, "Analysis/3_rprocval_checks_GLIS_T5.R"),
     package = "lakeontario"
   )
 }
