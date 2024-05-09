@@ -135,3 +135,16 @@ get_trawl_stats<-function(rawtow, reduceresolution ='10s',
   alltowstats
 }
 
+#' import_footrope_files
+#' @description A wrapper for `importRBR` specific to importing footrope files
+#' @export
+
+import_foot_rope_files<-function(rbrfiles) {
+  footfiles<-grep(rbrfiles, pattern = 'foot', value = T)
+  footstats<-bind_rows(lapply(footfiles, importRBR))
+
+  footstats <- footstats %>% rename(FOOT_DEPTH = DEPTH, FOOT_TEMP = TEMPERATURE)%>%
+    select(-OPtype, -FILE)
+
+  footstats
+}
