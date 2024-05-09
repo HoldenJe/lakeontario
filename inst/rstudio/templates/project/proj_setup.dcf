@@ -1,0 +1,40 @@
+Binding: proj_setup
+Title: GLMU Project
+OpenFiles: Instructions.md
+
+Parameter: PRJ_LDR
+Widget: TextInput
+Label: Project Leader
+Default: Firstname Lastname
+Position: Left
+
+Parameter: PRJ_CD
+Widget: TextInput
+Label: Project Code
+Default: LOA_IA99_ABC
+Position: Left
+
+Parameter: GLMU
+Widget: SelectInput
+Label: Lake Unit
+Default: LOMU
+Fields: UGLMU, LOMU, LEMU
+
+Parameter: GEAR
+Widget: SelectInput
+Label: Gear
+Fields: TWL, MTR, Other
+Default: TWL
+Position: Right
+
+Parameter: PRJ_DATE0
+Widget: TextInput
+Label: Project Start Date
+Default: 2099-03-25
+Position: Right
+
+Parameter: PRJ_DATE1
+Widget: TextInput
+Label: Project End Date
+Default: 2099-12-25
+Position: Right
