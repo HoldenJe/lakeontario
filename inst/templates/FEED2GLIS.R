@@ -72,6 +72,10 @@ rvcat123 <- tr_catch %>%
 rvcat123_nonfish <- tr_catch %>%
   filter(SPECIES %in% c(952, 940))
 
+rvcat123 <- semi_join(rvcat123, op2, by = c("SERIAL"= "Serial", "OP_Year", "VESSEL"="Vessel"))
+rvcat123_nonfish <- semi_join(rvcat123_nonfish, op2, by = c("SERIAL"= "Serial", "OP_Year", "VESSEL"="Vessel"))
+
+
 # add SPC codes
 spc <- inner_join(codes_spc, RV2FN_SPECIES, by = c("SpeciesCode" = "SPECIES"))
 rvcat123 <- left_join(rvcat123, RV2FN_SPECIES, by = c("SPECIES" = "SPECIES"))
@@ -477,6 +481,8 @@ if(!all(fn123nonfish_names == names(fn123nonfish))){ui_warn("Names don't match t
 
 # fn124 ----
 rvcat124 <- left_join(tr_lf, RV2FN_SPECIES, by = c("Species" = "SPECIES"))
+rvcat124 <- semi_join(rvcat124, op2, by = c('OP_Year', 'Vessel', 'Serial'))
+
 fn124 <- rvcat124 %>%
   mutate(
     PRJ_CD = prj_cd,
@@ -495,7 +501,7 @@ if(!all(fn124_names == names(fn124))){ui_warn("Names don't match template.")
 
 
 # fn125 ----
-
+rvcat125 <- semi_join(rvcat125, op2, by = c('Serial'))
 fn125 <- rvcat125 %>%
   mutate(
     PRJ_CD = prj_cd,
