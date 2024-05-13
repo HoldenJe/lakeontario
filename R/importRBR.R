@@ -148,3 +148,71 @@ import_foot_rope_files<-function(rbrfiles) {
 
   footstats
 }
+
+#' get trawl stats for foot rope
+#'
+#' @param rawtow
+#' @param reduceresolution
+#' @param rollmeanstat
+#' @param rollmeanmaxchange
+#' @param mindepthallowed
+#' @param max_dist_from_max_dep
+#'
+#' @return data frame of summarized tow stats
+#' @export
+#' @seealso [get_trawl_stats()]
+#'
+get_trawl_stats_foot_only <- function(rawtow, reduceresolution ='10s',
+                                      rollmeanstat = 10,
+                                      rollmeanmaxchange = 0.2,
+                                      mindepthallowed = 10,
+                                      max_dist_from_max_dep = 15) {
+  require(zoo)
+  require(lubridate)
+
+  # get surface temp
+  surfacetemp<- filter(rawtow, FOOT_DEPTH < 2) %>% group_by(YEAR, SERIAL) %>%
+    summarize(SURF_TEMP = round(mean(FOOT_TEMP), 2))
+
+  # identify tow area
+  fulltow <- filter(rawtow, FOOT_DEPTH > 2)
+
+  # plot temp profile
+  #plot(FOOT_DEPTH~FOOT_TEMP, fulltow, ylim = c(max(fulltow$FOOT_DEPTH), 0))
+
+  # identify tow period
+  ## define working parameters
+  # reduceresolution<-'10s'
+  # rollmeanstat <- 10
+  # rollmeanmaxchange <- 0.2
+  # mindepthallowed <- 12.5
+
+  fulltow <-fulltow %>% mutate(TIME = round_date(TIME, unit = reduceresolution))
+  fulltow <- fulltow %>% group_by(YEAR, SERIAL, TIME) %>%
+    summarize(FOOT_DEPTH = mean(FOOT_DEPTH))
+  fulltow$depchange<-c(NA, diff(fulltow$FOOT_DEPTH))
+  #plot(depchange~TIME, fulltow, main = "Depth Change", type= 'l')
+  fulltow$rmean<-abs(rollmean(fulltow$depchange, rollmeanstat, align = 'center', fill = NA))
+  plot(FOOT_DEPTH~TIME, fulltow, ylim = c(max(fulltow$FOOT_DEPTH), 0),
+       main = paste('Tow profile - Serial', unique(fulltow$SERIAL), ' - ', unique(fulltow$YEAR)))
+
+  fulltow$dist_from_max<-max(fulltow$FOOT_DEPTH) - fulltow$FOOT_DEPTH
+  justfishing<-filter(fulltow, rmean < rollmeanmaxchange,
+                      FOOT_DEPTH > mindepthallowed,
+                      dist_from_max < max_dist_from_max_dep) # this could be moved to the function to tweak
+
+  points(FOOT_DEPTH~TIME, justfishing, col='red', pch = 16)
+
+  fishingstats <- rawtow %>% filter(TIME > min(justfishing$TIME) & TIME < max(justfishing$TIME))%>%
+    group_by(YEAR, SERIAL) %>%
+    summarize(foot_depth_mean = round(mean(FOOT_DEPTH),2),
+              foot_max_depth = round(max(FOOT_DEPTH),2),
+              foot_min_depth = round(min(FOOT_DEPTH),2),
+              foot_mean_tempC = round(mean(FOOT_TEMP),2),
+              foot_max_tempC = round(max(FOOT_TEMP),2),
+              foot_min_depth = round(min(FOOT_DEPTH),2),
+              tow_duration_est = round(justfishing$TIME[nrow(justfishing)]-justfishing$TIME[1],1),
+    )
+  alltowstats<-inner_join(surfacetemp, fishingstats)
+  alltowstats
+}
