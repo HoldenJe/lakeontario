@@ -39,7 +39,7 @@ ui_warn("Your GLIS database is going to be deleted!")
 
 # Define project code ----
 load("params.RData") # loads as `myinputs`
-load("2023_SBT_towstats.Rdata") # btr_mens...
+load("towstats.Rdata") # btr_mens...
 fulton <- read.csv("Data/FultonK_values.csv")
 prj_cd <- myinputs$PRJ_CD
 
@@ -84,7 +84,7 @@ rvcat125 <- left_join(tr_fish, RV2FN_SPECIES, by = c("Species" = "SPECIES"))
 # Connect to template database ----
 # get table names for `select`-ing
 
-dbase_template <- "Data/GLIS/Great_Lakes_Assessment_Template_5.accdb"
+dbase_template <- "Data/Processed/Great_Lakes_Assessment_Template_5.accdb"
 ui_info(paste0("Getting headers from ", dbase_template))
 
 conn_template <- odbcConnectAccess2007(dbase_template, uid = "", pwd = "")
@@ -333,7 +333,7 @@ rvcat121 <- inner_join(op2, op3, by=c("Serial"))
 rvcat121 <- inner_join(rvcat121, op4, by = c("Serial"))
 rvcat121 <- inner_join(rvcat121, op5, by = c("Serial"))
 rvcat121 <- rvcat121 %>% filter(Target == 690)
-rvcat121 <- left_join(rvcat121, btr_mensuration2023, by = c("OP_Year" = "YEAR", "Serial" = "SERIAL"))
+rvcat121 <- left_join(rvcat121, btr_mensuration, by = c("OP_Year" = "YEAR", "Serial" = "SERIAL"))
 rvcat121 <- rvcat121 %>% select(-TOW_TIME1)
 rvcat121 <- left_join(rvcat121, op6, by = c("Serial" = "SERIAL"))
 
@@ -599,7 +599,7 @@ Gear_Eff_Process <- data.frame(
 )
 #
 # # Write tables to template database ----
-dbase_write <- "Data/GLIS/LOA_IA23_TW4_T5.accdb"
+dbase_write <- paste0("Data/Processed/", myinputs$PRJ_CD, "_T5.accdb")
 if(file.exists(dbase_write)) {file.remove(dbase_write)}
 file.copy(dbase_template, dbase_write)
 
