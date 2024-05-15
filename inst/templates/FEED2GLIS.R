@@ -70,7 +70,7 @@ op2 <- op2 %>% filter(Target != 999)
 rvcat123 <- tr_catch %>%
   filter(!SPECIES %in% c(952, 0, 940, 999))
 rvcat123_nonfish <- tr_catch %>%
-  filter(SPECIES %in% c(952, 940))
+  filter(SPECIES %in% c(952))
 
 rvcat123 <- semi_join(rvcat123, op2, by = c("SERIAL"= "Serial", "OP_Year", "VESSEL"="Vessel"))
 rvcat123_nonfish <- semi_join(rvcat123_nonfish, op2, by = c("SERIAL"= "Serial", "OP_Year", "VESSEL"="Vessel"))
