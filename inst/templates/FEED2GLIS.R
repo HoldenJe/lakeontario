@@ -334,7 +334,6 @@ rvcat121 <- inner_join(rvcat121, op4, by = c("Serial"))
 rvcat121 <- inner_join(rvcat121, op5, by = c("Serial"))
 rvcat121 <- rvcat121 %>% filter(Target == 690)
 rvcat121 <- left_join(rvcat121, btr_mensuration, by = c("OP_Year" = "YEAR", "Serial" = "SERIAL"))
-rvcat121 <- rvcat121 %>% select(-TOW_TIME1)
 rvcat121 <- left_join(rvcat121, op6, by = c("Serial" = "SERIAL"))
 
 # fn121 also needs to be merged with the trawl mensuration data once completed to fill in a few fields - see below

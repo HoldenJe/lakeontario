@@ -8,6 +8,14 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 source("Analysis/FEED_validation_pointblank_report.R")
+op <- op %>% mutate(DD_LAT = feed_convert_coords(LATITUDE),
+                    DD_LON = feed_convert_coords(LONGITUDE)*(-1))
+```
+
+# Survey Map
+```{r}
+base_ontarioshore + 
+  geom_point(data = op, aes(DD_LON, DD_LAT, col = as.factor(PORT)))
 ```
 
 # Pointblank Report on FEED Database
