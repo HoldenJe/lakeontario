@@ -38,3 +38,14 @@ FN125_errors <- FN125 %>%
   map(fn125_tl_rwt_lm, makeplot = T) %>%
   bind_rows()
 
+# Check for points that aren't in LO
+FN121_spatial <- st_as_sf(FN121, coords = c("DD_LON0", "DD_LAT0"), crs = 4326)
+spatial_test <- st_join(FN121_spatial, shape_ontarioshore, join = st_covered_by, left = T)
+spatial_errors <- spatial_test %>% filter(is.na(PERIMETER))
+if(nrow(spatial_errors >0)){
+  usethis::ui_oops("Points exist outside the Lake Ontario boundary")
+  spatial_errors
+} else {
+  usethis::ui_info("All points are within Lake Ontario boundary")
+  base_ontarioshore + geom_sf(data = FN121_spatial)
+}

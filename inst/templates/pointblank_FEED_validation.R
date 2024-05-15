@@ -20,6 +20,9 @@ library(rprocval) # available by: devtools::install_github("HoldenJe/rprocval")
 library(purrr)
 library(lubridate)
 
+load("params.RData")
+sample_year <- year(dmy(myinputs$PRJ_DATE0))
+sample_months <- c(month(dmy(myinputs$PRJ_DATE0)),month(dmy(myinputs$PRJ_DATE1)))
 # Access requires 32-bit R
 testR <- Sys.getenv("R_ARCH") == "/i386"
 if(testR){
@@ -44,11 +47,11 @@ odbcClose(conn)
 al <- action_levels(warn_at = 1) # any failed test will generate a "warning" level response
 
 #### manipulate tables as required ----
-sampleN <- sampleWT %>% filter(!(Species %in%c(952, 999)))
+sampleN <- sampleWT %>% filter(!(Species %in%c(952, 999, 940, 0)))
 
 op <- op %>%
   mutate(MONTH = month(OP_DATE)) %>%
-  mutate(IsSpring = ifelse(MONTH %in% c(3,4), TRUE, FALSE))
+  mutate(InSSN = ifelse(MONTH %in% sample_months, TRUE, FALSE))
 
 tr_op$ExpectedWarp <- tr_op$Fishing_Depth*3
 tr_op <- tr_op %>%
@@ -98,7 +101,8 @@ compare_lf_catwt <- compare_lf_catwt %>%
 
 lf_summary <- left_join(sampleN, rvcat_lf_summary) %>%
   filter(LifeStage == 6) %>%
-  select(Serial, Species, LifeStage, Weight, Count, N_LF)
+  select(Serial, Species, LifeStage, Weight, Count, N_LF) %>%
+  mutate(N_LF_lte_Count = N_LF <= Count)
 
 # trFISH l vs w
 fish <- inner_join(tr_fish, species)
@@ -129,8 +133,8 @@ op_agent <- create_agent(op, "OP", actions = al) %>%
   col_is_integer(vars(VESSEL_COMPASS)) %>%
   col_vals_equal(vars(VESSEL), value = 38) %>%
   col_vals_equal(vars(LAKE), value = 6) %>%
-  col_vals_equal(vars(YEAR), value = 2023) %>%
-  col_vals_equal(vars(IsSpring), value = TRUE) %>%
+  col_vals_equal(vars(YEAR), value = sample_year) %>%
+  col_vals_equal(vars(InSSN), value = TRUE) %>%
   interrogate()
 
 tow_times <- create_agent(op_times, "RVCAT TR_OP", actions = al) %>%
@@ -155,6 +159,11 @@ sampleWT_agent <- create_agent(sampleWTbatch, "Subsample Batch", actions = al) %
   col_vals_between(vars(PropSampled), left = 0.8, right = 1) %>%
   interrogate()
 
+lf_agent <- create_agent(lf_summary, "Length Frequency", actions = al) %>%
+  col_vals_not_null(vars(Weight, Count, N_LF)) %>%
+  col_vals_equal(vars(N_LF_lte_Count), TRUE) %>%
+  interrogate()
+
 lf_to_catchWT_agent <- create_agent(compare_lf_catwt,
                                     "Length Freq vs Avg Fish Size",
                                     actions = al) %>%
@@ -172,6 +181,6 @@ has_lam <- create_agent(lamchecksp,
   interrogate()
 
 multi_report <- create_multiagent(op_agent, trop_agent, tow_times, subsample_agent,
-                                  sampleWT_agent, lf_to_catchWT_agent, fish_bio, has_lam)
+                                  sampleWT_agent, lf_agent, lf_to_catchWT_agent, fish_bio, has_lam)
 
 multi_report
