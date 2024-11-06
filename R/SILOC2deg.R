@@ -1,4 +1,7 @@
 #' Parses LAT from a 12 character SILOC
+#'
+#' @param fn121column specify the FN2 column name
+#'
 #' @description Helper function for SILOC2COORD to get LAT
 #' @export
 
@@ -13,6 +16,7 @@ SILOCgetLAT12<-function(fn121column) {
 
 #' Parses LON from a 12 character SILOC
 #' @description Helper function for SILOC2COORD to get LON
+#' @param fn121column specify the FN2 column name
 #' @export
 #'
 
@@ -27,6 +31,7 @@ SILOCgetLON12<-function(fn121column) {
 
 #' Parses LAT from a 10 character SILOC
 #' @description Helper function for SILOC2COORD to get LAT
+#' @param fn121column specify the FN2 column name
 #' @export
 
 SILOCgetLAT10<-function(fn121column) {
@@ -39,6 +44,7 @@ SILOCgetLAT10<-function(fn121column) {
 }
 
 #' Parses LON from a 10 characterSILOC
+#' @param fn121column specify the FN2 column name
 #' @description Helper function for SILOC2COORD to get LON
 #' @export
 #'
@@ -57,6 +63,9 @@ SILOCgetLON10<-function(fn121column) {
 #' @description XSILOC1 is a 12 character field that records LAT and LON in the format
 #' DDMMddDDMMdd (LAT then LON). This function uses two helper functions to parse the field and add a
 #' LAT and LON field to the FN121 table provided.
+#' @param fn121 specify the FN121 table name
+#' @param fn121column specify the FN2 column name
+#'
 #' @export
 
 SILOC2COORD<-function(fn121, fn121column){

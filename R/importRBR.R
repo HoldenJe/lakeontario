@@ -1,6 +1,7 @@
 #' importRBR
 #' @description A wrapper for the `oce` function `read.rsk`. This wrapper converts the raw pressure data
 #' and converts it to depth in freshwater.
+#' @param rskfile a *.rsk file from an RBR temp/depth logger
 #' @export
 
 importRBR<-function(rskfile) {
@@ -26,6 +27,7 @@ importRBR<-function(rskfile) {
 
 #' import_merge_tow_files
 #' @description A wrapper for `importRBR` specific to merging head and footrope files
+#' @param rskfile a *.rsk file from an RBR temp/depth logger that has been parsed and appended with 'head' or 'foot'
 #' @export
 
 import_merge_tow_files<-function(rbrfiles) {
@@ -49,6 +51,7 @@ import_merge_tow_files<-function(rbrfiles) {
 
 #' rbr_tow_plot
 #' @description plots a tow profile
+#' @param oneserial a dataframe that contains depth and temp info from a single tow
 #' @export
 
 rbr_tow_plot<-function(oneserial) {
@@ -69,6 +72,14 @@ rbr_tow_plot<-function(oneserial) {
 
 
 #' get_trawl_stats
+#'
+#' @param rawtow a dataframe of temp and depth values
+#' @param reduceresolution a smoothing parameter. Default = 10s
+#' @param rollmeanstat a value that indicates how many seconds the rolling mean should be caluclated over
+#' @param rollmeanmaxchange a value that indicates the max change in mean between values
+#' @param mindepthallowed the minimum depth that the tow is expected to be in
+#' @param max_dist_from_max_dep the maximum depth change the max depth and when the tow is still likely to be on bottom
+#'
 #' @description Input a list of rsk files that have been imported using `importRBR` to generate tow statistics
 #' @export
 
@@ -137,6 +148,7 @@ get_trawl_stats<-function(rawtow, reduceresolution ='10s',
 
 #' import_footrope_files
 #' @description A wrapper for `importRBR` specific to importing footrope files
+#' @param rskfile a *.rsk file from an RBR temp/depth logger that has been parsed and appended with 'foot'
 #' @export
 
 import_foot_rope_files<-function(rbrfiles) {
@@ -151,12 +163,12 @@ import_foot_rope_files<-function(rbrfiles) {
 
 #' get trawl stats for foot rope
 #'
-#' @param rawtow
-#' @param reduceresolution
-#' @param rollmeanstat
-#' @param rollmeanmaxchange
-#' @param mindepthallowed
-#' @param max_dist_from_max_dep
+#' @param rawtow a dataframe of temp and depth values
+#' @param reduceresolution a smoothing parameter. Default = 10s
+#' @param rollmeanstat a value that indicates how many seconds the rolling mean should be caluclated over
+#' @param rollmeanmaxchange a value that indicates the max change in mean between values
+#' @param mindepthallowed the minimum depth that the tow is expected to be in
+#' @param max_dist_from_max_dep the maximum depth change the max depth and when the tow is still likely to be on bottom
 #'
 #' @return data frame of summarized tow stats
 #' @export

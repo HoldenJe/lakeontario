@@ -1,3 +1,12 @@
+#' proj_setup
+#' @description
+#' A project setup function that is used for new RStudio project template
+#'
+#' @param path file path that is populated during the setup procedure
+#' @param ... additional arguments as required
+#'
+#' @export
+#'
 proj_setup <- function(path, ...) {
 
   # Create directories

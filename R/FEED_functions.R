@@ -4,6 +4,8 @@
 #' @description FEED stores coordinate as `DDMM.ddd`. This function converts
 #' that format to `DD.ddd` for plotting purposes. Note: Longitude will normally require
 #' the value to be multiplied by `-1 ` for sites in the western hemisphere
+#' @param feedcoord a lat or long in the FEEd format of DDMM.mmm
+#' @returns coordinate value as DD.ddd
 #' @export
 #' @examples
 #' feed_convert_coords(7705.819) * (-1)
