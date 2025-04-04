@@ -1,6 +1,7 @@
 Binding: proj_setup
 Title: FEED Trawl Project
-OpenFiles: Instructions.md
+OpenFiles: FinishSetup.R, README.md, Instructions.md
+Icon: lontario.png
 
 Parameter: PRJ_LDR
 Widget: TextInput
