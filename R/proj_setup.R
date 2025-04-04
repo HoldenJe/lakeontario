@@ -44,6 +44,10 @@ proj_setup <- function(path, ...) {
   )
 
   instructions <- c(
+    "---",
+    "title: Instructions",
+    "output: html_document",
+    "---",
     "# Binational Trawl Project Template Intructions  ",
     "<!-- This file is best viewed using the RStudio previewer -->",
     "## Standard Templates  ",
@@ -87,6 +91,12 @@ proj_setup <- function(path, ...) {
   names(prj_params) <- c("PRJ_LDR", "PRJ_CD", "GLMU", "GR", "PRJ_DATE0", "PRJ_DATE1")
 
   # collect into single text string
+  mdyaml <- c(
+    "---",
+    "title: Instructions",
+    "output: html_document",
+    "---"
+  )
   contents <- paste(
     paste(header, collapse = "\n"),
     paste(text, collapse = "\n"),
@@ -99,54 +109,18 @@ proj_setup <- function(path, ...) {
     "Please provide a simple description of the project"
   )
 
+  finishproject <- c(
+    "# Run the finish_setup() function to complete project setup",
+    " ",
+    "lakeontario::finish_setup()",
+    " ",
+    "# this file can be deleted once sourced"
+  )
+
   # write to index file
-  readme <- c(contents, " ", abstract, " ", "# Folder Description", " ", FolderDescrip)
+  readme <- c(mdyaml, contents, " ", abstract, " ", "# Folder Description", " ", FolderDescrip)
   writeLines(readme, con = file.path(path, "README.md"))
   save(prj_params, file = file.path(path, "params.RData"))
+  writeLines(finishproject, con = file.path(path, "FinishSetup.R"))
 
-  # create template files
-  usethis::use_template(
-    template = "pointblank_FEED_validation.R",
-    save_as = file.path(path,"Reports/1_FEED_pointblank_error_check_routine.R"),
-    package = "lakeontario"
-  )
-
-  usethis::use_template(
-    template = "multiagent.Rmd",
-    save_as = file.path(path,"Reports/2_FEED_pointblank_error_check_report.Rmd"),
-    package = "lakeontario"
-  )
-
-  usethis::use_template(
-    template = "rprocval_gl5_checks.Rmd",
-    save_as = file.path(path,"Reports/3_error_check_report.Rmd"),
-    package = "lakeontario"
-  )
-
-  usethis::use_template(
-    template = "bottom_pick.R",
-    save_as = file.path(path, "Analysis/1_RBR_bottom_pick.R"),
-    package = "lakeontario"
-  )
-
-  usethis::use_template(
-    template = "FEED2GLIS.R",
-    save_as = file.path(path, "Analysis/2_FEED_to_GLIS_T5.R"),
-    package = "lakeontario"
-  )
-
-  usethis::use_template(
-    template = "rprocval_gl5_checks.R",
-    save_as = file.path(path, "Analysis/3_rprocval_checks_GLIS_T5.R"),
-    package = "lakeontario"
-  )
-
-  usethis::use_template(
-    template = "FEEDMonitor.R",
-    save_as = file.path(path, "Data/FEEDMonitorApp.R"),
-    package = "lakeontario"
-  )
-
-  rmarkdown::render(file.path(path, "Instructions.md"))
-  rmarkdown::render(file.path(path, "README.md"))
 }
