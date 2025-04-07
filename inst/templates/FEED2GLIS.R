@@ -38,10 +38,10 @@ ui_info("Starting FEED2GLIS wrapper.")
 ui_warn("Your GLIS database is going to be deleted!")
 
 # Define project code ----
-load("params.RData") # loads as `myinputs`
+load("params.RData") # loads as `prj_params`
 load("towstats.Rdata") # btr_mens...
 fulton <- read.csv("Data/FultonK_values.csv")
-prj_cd <- myinputs$PRJ_CD
+prj_cd <- prj_params$PRJ_CD
 
 # Connect to raw data ----
 dbase <- file.path("Data/Raw/OntarioExplorerSBT23.mdb")
@@ -111,13 +111,13 @@ fn011 <- data.frame(
   YEAR = unique(op2$OP_Year),
   PRJ_CD = prj_cd,
   PRJ_NM = "Lake Ontario Binational Spring Prey Fish Assessment",
-  PRJ_LDR = myinputs$PI,
+  PRJ_LDR = prj_params$PRJ_LDR,
   # PRJ_DATE0 = as.character(ymd(min(op$OP_DATE))),
   # PRJ_DATE1 = as.character(ymd(max(op$OP_DATE))),
-  PRJ_DATE0 = format(dmy(myinputs$PRJ_DATE0), format = "%Y-%m-%d"),
-  PRJ_DATE1 = format(dmy(myinputs$PRJ_DATE1), format = "%Y-%m-%d"),
+  PRJ_DATE0 = format(dmy(prj_params$PRJ_DATE0), format = "%Y-%m-%d"),
+  PRJ_DATE1 = format(dmy(prj_params$PRJ_DATE1), format = "%Y-%m-%d"),
   COMMENT0 = "Binational spring trawling program that targets Alewife",
-  PROTOCOL = myinputs$GR,
+  PROTOCOL = prj_params$GR,
   LAKE = "ON")
 
 if(!all(fn011_names == names(fn011))){
@@ -231,8 +231,8 @@ fn022 <- data.frame (
   PRJ_CD = prj_cd,
   SSN = "00",
   SSN_DES = "Early Spring",
-  SSN_DATE0 = format(dmy(myinputs$PRJ_DATE0), format = "%Y-%m-%d"),
-  SSN_DATE1 = format(dmy(myinputs$PRJ_DATE1), format = "%Y-%m-%d")
+  SSN_DATE0 = format(dmy(prj_params$PRJ_DATE0), format = "%Y-%m-%d"),
+  SSN_DATE1 = format(dmy(prj_params$PRJ_DATE1), format = "%Y-%m-%d")
 )
 
 if(!all(fn022_names == names(fn022))){ui_warn("Names don't match template.")
@@ -598,7 +598,7 @@ Gear_Eff_Process <- data.frame(
 )
 #
 # # Write tables to template database ----
-dbase_write <- paste0("Data/Processed/", myinputs$PRJ_CD, "_T5.accdb")
+dbase_write <- paste0("Data/Processed/", prj_params$PRJ_CD, "_T5.accdb")
 if(file.exists(dbase_write)) {file.remove(dbase_write)}
 file.copy(dbase_template, dbase_write)
 

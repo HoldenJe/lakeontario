@@ -21,8 +21,8 @@ library(purrr)
 library(lubridate)
 
 load("params.RData")
-sample_year <- year(ymd(myinputs$PRJ_DATE0))
-sample_months <- c(month(ymd(myinputs$PRJ_DATE0)):month(ymd(myinputs$PRJ_DATE1)))
+sample_year <- year(ymd(prj_params$PRJ_DATE0))
+sample_months <- c(month(ymd(prj_params$PRJ_DATE0)):month(ymd(prj_params$PRJ_DATE1)))
 # Access requires 32-bit R
 testR <- Sys.getenv("R_ARCH") == "/i386"
 if(testR){
