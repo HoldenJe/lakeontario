@@ -93,7 +93,7 @@ proj_setup <- function(path, ...) {
   # collect into single text string
   mdyaml <- c(
     "---",
-    "title: Instructions",
+    "title: README",
     "output: html_document",
     "---"
   )
