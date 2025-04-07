@@ -8,7 +8,7 @@
 
 # set local parameters ----
 # specify database connection as required
-dbase <- "Data/Raw/OntarioExplorerSBT23.mdb"
+dbase <- file.choose()
 
 # QA/QC checks
 library(dplyr)
@@ -21,8 +21,8 @@ library(purrr)
 library(lubridate)
 
 load("params.RData")
-sample_year <- year(dmy(myinputs$PRJ_DATE0))
-sample_months <- c(month(dmy(myinputs$PRJ_DATE0)),month(dmy(myinputs$PRJ_DATE1)))
+sample_year <- year(ymd(myinputs$PRJ_DATE0))
+sample_months <- c(month(ymd(myinputs$PRJ_DATE0)):month(ymd(myinputs$PRJ_DATE1)))
 # Access requires 32-bit R
 testR <- Sys.getenv("R_ARCH") == "/i386"
 if(testR){
