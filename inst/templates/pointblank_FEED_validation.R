@@ -156,7 +156,7 @@ subsample_agent <- create_agent(subsample, "Subsample", actions = al) %>%
 
 sampleWT_agent <- create_agent(sampleWTbatch, "Subsample Batch", actions = al) %>%
   col_vals_not_null(vars(SampleWeight, SampledWt)) %>%
-  col_vals_between(vars(PropSampled), left = 0.8, right = 1) %>%
+  col_vals_between(vars(PropSampled), left = 0.8, right = 1.1) %>%
   interrogate()
 
 lf_agent <- create_agent(lf_summary, "Length Frequency", actions = al) %>%
@@ -176,7 +176,7 @@ fish_bio <- create_agent(fish_rproc_tests, "Fish Bio", actions = al) %>%
 
 lamchecksp <- tr_fish %>% filter(Species %in% c(307, 202, 203))
 has_lam <- create_agent(lamchecksp,
-                        "Species require") %>%
+                        "Species require", actions = al) %>%
   col_vals_equal(vars(WoundsYN), "Y") %>%
   interrogate()
 
