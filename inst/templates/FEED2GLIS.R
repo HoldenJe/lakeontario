@@ -114,8 +114,8 @@ fn011 <- data.frame(
   PRJ_LDR = prj_params$PRJ_LDR,
   # PRJ_DATE0 = as.character(ymd(min(op$OP_DATE))),
   # PRJ_DATE1 = as.character(ymd(max(op$OP_DATE))),
-  PRJ_DATE0 = format(dmy(prj_params$PRJ_DATE0), format = "%Y-%m-%d"),
-  PRJ_DATE1 = format(dmy(prj_params$PRJ_DATE1), format = "%Y-%m-%d"),
+  PRJ_DATE0 = format(ymd(prj_params$PRJ_DATE0), format = "%Y-%m-%d"),
+  PRJ_DATE1 = format(ymd(prj_params$PRJ_DATE1), format = "%Y-%m-%d"),
   COMMENT0 = "Binational spring trawling program that targets Alewife",
   PROTOCOL = prj_params$GR,
   LAKE = "ON")
