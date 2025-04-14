@@ -35,6 +35,8 @@ conn <- odbcConnectAccess(dbase, uid = "", pwd = "")
 op <- sqlFetch(conn, "Calc_RVCAT OP")
 op_times <- sqlFetch(conn, "Calc_RVCAT TR_OP")
 tr_op <- sqlFetch(conn, "OP_5Trawl_OP")
+op_begin <- sqlFetch(conn, "OP_3Begin")
+op_end <- sqlFetch(conn, "OP_4End")
 target <- sqlFetch(conn, "Calc_RVCAT OP_TARGET")
 subsample <- sqlFetch(conn, "TR_1SubSample")
 sampleWT <- sqlFetch(conn, "TR_3DSpeciesCtWt")
@@ -123,6 +125,17 @@ fish_rproc_tests <- fish_fn2 %>%
 
 fish_rproc_tests$qid4_error[is.na(fish_rproc_tests$qid4_error)] <- FALSE
 
+# check raw start and end times
+op_end <- op_end %>% 
+  mutate(MONTH = month(End_Date)) %>%
+  mutate(InSSN = ifelse(MONTH %in% sample_months, TRUE, FALSE))
+
+op_time <- inner_join(op_begin, op_end, by = "Serial") %>% 
+  mutate(EFFDUR = as.numeric(End_ESTime - Beg_ESTime)) 
+
+op_date <- inner_join(op, op_end, by=c("SERIAL"="Serial")) %>% 
+  mutate(DT0DT1 = ifelse(OP_DATE == End_Date, TRUE, FALSE))
+
 # do pointblank validation ----
 op_agent <- create_agent(op, "OP", actions = al) %>%
   col_vals_not_null(vars(YEAR, VESSEL, SERIAL, LAKE, PORT, OP_DATE,
@@ -135,6 +148,21 @@ op_agent <- create_agent(op, "OP", actions = al) %>%
   col_vals_equal(vars(LAKE), value = 6) %>%
   col_vals_equal(vars(YEAR), value = sample_year) %>%
   col_vals_equal(vars(InSSN), value = TRUE) %>%
+  interrogate()
+
+op_end_agent <- create_agent(op_end, "OP_4End", actions = al) %>% 
+  col_vals_not_null(vars(End_Date, End_Latitude, End_Longitude, End_Depth, End_ESTime)) %>% 
+  col_vals_equal(vars(InSSN), value = TRUE) %>%
+  interrogate()
+
+effdur_agent <- create_agent(op_time, "EFFDUR", actions = al) %>% 
+  col_vals_not_null(EFFDUR) %>% 
+  col_vals_gt(vars(EFFDUR), value = 0) %>% 
+  col_vals_between(vars(EFFDUR), left = 2, right = 10) %>% 
+  interrogate()
+
+dt0dt1_agent <- create_agent(op_date, "EFFDT0 vs EFFDT1", actions = al) %>% 
+  col_vals_equal(vars(DT0DT1), value = TRUE) %>% 
   interrogate()
 
 tow_times <- create_agent(op_times, "RVCAT TR_OP", actions = al) %>%
@@ -180,7 +208,8 @@ has_lam <- create_agent(lamchecksp,
   col_vals_equal(vars(WoundsYN), "Y") %>%
   interrogate()
 
-multi_report <- create_multiagent(op_agent, trop_agent, tow_times, subsample_agent,
-                                  sampleWT_agent, lf_agent, lf_to_catchWT_agent, fish_bio, has_lam)
+multi_report <- create_multiagent(op_agent, trop_agent,  op_end_agent, dt0dt1_agent, effdur_agent, 
+                                  tow_times, subsample_agent, sampleWT_agent, lf_agent, 
+                                  lf_to_catchWT_agent, fish_bio, has_lam)
 
 multi_report
