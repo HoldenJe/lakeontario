@@ -7,9 +7,13 @@ library(tidyr)
 library(dplyr)
 library(purrr)
 library(ggplot2)
+library(sf)
+
+load("params.RData")
+dbase_file <- paste0("Data/Processed/", prj_params$PRJ_CD, "_T5.accdb")
 
 # Connect to raw data ----
-dbase <- file.path("Data/GLIS/LOA_IA23_TW4_T5.accdb")
+dbase <- file.path(dbase_file)
 conn <- odbcConnectAccess2007(dbase,uid = "", pwd = "")
 FN011 <- sqlFetch(conn, "FN011")
 FN012 <- sqlFetch(conn, "FN012")
