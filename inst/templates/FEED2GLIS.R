@@ -231,8 +231,8 @@ fn022 <- data.frame (
   PRJ_CD = prj_cd,
   SSN = "00",
   SSN_DES = "Early Spring",
-  SSN_DATE0 = format(dmy(prj_params$PRJ_DATE0), format = "%Y-%m-%d"),
-  SSN_DATE1 = format(dmy(prj_params$PRJ_DATE1), format = "%Y-%m-%d")
+  SSN_DATE0 = format(ymd(prj_params$PRJ_DATE0), format = "%Y-%m-%d"),
+  SSN_DATE1 = format(ymd(prj_params$PRJ_DATE1), format = "%Y-%m-%d")
 )
 
 if(!all(fn022_names == names(fn022))){ui_warn("Names don't match template.")
