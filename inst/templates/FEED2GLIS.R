@@ -520,8 +520,11 @@ fn125 <- rvcat125 %>%
     CLIPC = as.character(case_when(
       Fin_Clip == 0 ~ "0",
       Fin_Clip == 2 ~ "45",
-      Fin_Clip == 6 ~ "15"
-    )), # this should be done in FEED db in Codes_FinClip
+      Fin_Clip == 6 ~ "15",
+      Fin_Clip == 1 ~"5", 
+      Fin_Clip == 3 ~ "35", 
+      Fin_Clip == 5 ~"25" 
+    )), # this should be done in FEED db in Codes_FinClip to cover all possible RVCAT codes
     CLIPA = NA,
     NODC = NA,
     NODA = NA,
